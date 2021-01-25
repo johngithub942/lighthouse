@@ -15,8 +15,9 @@ var ElasticSearchURL string
 // AfterBulkSend checks for errors in bulk processing a logs them.
 func AfterBulkSend(executionID int64, requests []elastic.BulkableRequest, response *elastic.BulkResponse, err error) {
 	if response.Errors {
+		logrus.Warnf("total errors found in batch %d", len(response.Failed()))
 		for _, failure := range response.Failed() {
-			logrus.Error(failure.Error)
+			logrus.Error("ID: ", failure.Id, " SeqNo: ", failure.SeqNo, " Error: ", failure.Error)
 		}
 	}
 }
