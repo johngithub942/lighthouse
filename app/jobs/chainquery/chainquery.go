@@ -124,6 +124,8 @@ func Sync(channelID *string) {
 				claim.ReleaseTime = claim.TransactionTime
 			}
 			claim.Tags = strings.Split(claim.TagsStr.String, ",")
+
+			claim.ProcessFilters() //Must be done last after all data is set
 			if claim.BidState == "Spent" || claim.BidState == "Expired" {
 				claim.Delete(p)
 			} else {

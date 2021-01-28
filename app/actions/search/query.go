@@ -300,6 +300,12 @@ func (r searchRequest) getFilters() []elastic.Query {
 		filters = append(filters, related)
 	}
 
+	if definedFilters := r.definedRestrictions(); definedFilters != nil {
+		for _, f := range definedFilters {
+			filters = append(filters, f)
+		}
+	}
+
 	if len(filters) > 0 {
 		return append(filters, bidstateFilter) //, r.noClaimChannelFilter())
 	}
@@ -342,6 +348,28 @@ func (r searchRequest) claimTypeFilter() *elastic.MatchQuery {
 		}
 	}
 	return nil
+}
+
+type filterFn = func() *elastic.BoolQuery
+
+var definedFilters = map[string]filterFn{
+	"ios": func() *elastic.BoolQuery {
+		return elastic.NewBoolQuery().MustNot(elastic.NewMatchQuery("ios_filtered", true))
+	},
+}
+
+func (r searchRequest) definedRestrictions() []elastic.Query {
+	var defined []elastic.Query
+	if len(r.filterset) == 0 {
+		return defined
+	}
+	for _, f := range r.filterset {
+		fn, ok := definedFilters[f]
+		if ok {
+			defined = append(defined, fn())
+		}
+	}
+	return defined
 }
 
 func (r searchRequest) relatedContentFilter() *elastic.MatchQuery {

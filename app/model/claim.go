@@ -51,6 +51,7 @@ type Claim struct {
 	ClaimCount          uint64                 `json:"claim_cnt,omitempty"`
 	EffectiveSum        uint64                 `json:"effective_sum,omitempty"`
 	ChannelEffectiveSum uint64                 `json:"channel_effective_sum,omitempty"`
+	IOSFiltered         bool                   `json:"ios_filtered,omitempty"`
 }
 
 // NewClaim creates an instance of Claim with default values for pointers.
@@ -136,6 +137,37 @@ func (c *Claim) PopulateFromDB(rows *sql.Rows) error {
 		err = errors.Prefix("Scan Err:", err)
 	}
 	return err
+}
+
+// ProcessFilters sets the filter booleans that apply for the data
+func (c *Claim) ProcessFilters() {
+	c.IOSFiltered = c.isIOSFilter()
+
+}
+
+var iosFilter = []string{"covid", "corona", "sars"}
+
+func (c Claim) isIOSFilter() bool {
+	for _, f := range iosFilter {
+		if strings.Contains(c.Name, f) ||
+			strings.Contains(c.Name, f) ||
+			strings.Contains(c.Channel.String, f) ||
+			strings.Contains(c.Title.String, f) ||
+			strings.Contains(c.Description.String, f) ||
+			c.tagsContain(f) {
+			c.IOSFiltered = true
+		}
+	}
+	return false
+}
+
+func (c Claim) tagsContain(s string) bool {
+	for _, t := range c.Tags {
+		if strings.Contains(t, s) {
+			return true
+		}
+	}
+	return false
 }
 
 // Add Inserts the claim as a document via the bulk processor into elasticsearch
