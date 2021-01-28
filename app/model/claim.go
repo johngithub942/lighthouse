@@ -149,11 +149,11 @@ var iosFilter = []string{"covid", "corona", "sars"}
 
 func (c Claim) isIOSFilter() bool {
 	for _, f := range iosFilter {
-		if strings.Contains(c.Name, f) ||
-			strings.Contains(c.Name, f) ||
-			strings.Contains(c.Channel.String, f) ||
-			strings.Contains(c.Title.String, f) ||
-			strings.Contains(c.Description.String, f) ||
+		if contains(c.Name, f) ||
+			contains(c.Name, f) ||
+			contains(c.Channel.String, f) ||
+			contains(c.Title.String, f) ||
+			contains(c.Description.String, f) ||
 			c.tagsContain(f) {
 			return true
 		}
@@ -161,9 +161,13 @@ func (c Claim) isIOSFilter() bool {
 	return false
 }
 
+func contains(field, value string) bool {
+	return strings.Contains(strings.ToLower(field), strings.ToLower(value))
+}
+
 func (c Claim) tagsContain(s string) bool {
 	for _, t := range c.Tags {
-		if strings.Contains(t, s) {
+		if contains(t, s) {
 			return true
 		}
 	}
