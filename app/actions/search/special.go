@@ -1,6 +1,11 @@
 package search
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/lbryio/lbry.go/v2/extras/errors"
+	"github.com/lbryio/ozzo-validation/is"
+)
 
 var tayloredResults = map[string]string{
 	"silvano":                "@SilvanoTrotta",
@@ -47,4 +52,19 @@ func truncate(s string) string {
 		return s[:limitForUsefulResults]
 	}
 	return s
+}
+
+func collectFilters(s *string) ([]string, error) {
+	if s == nil {
+		return nil, nil
+	}
+
+	filters := strings.Split(*s, ",")
+	for _, f := range filters {
+		err := is.PrintableASCII.Validate(f)
+		if err != nil {
+			return nil, errors.Err(err)
+		}
+	}
+	return filters, nil
 }

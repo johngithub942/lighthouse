@@ -39,6 +39,7 @@ type searchRequest struct {
 	NSFW        *bool
 	FreeOnly    *bool
 	Resolve     bool
+	Filters     *string
 	//Debug params
 	ClaimID    *string
 	Score      bool
@@ -46,6 +47,7 @@ type searchRequest struct {
 	Debug      bool
 	searchType string
 	terms      int
+	filterset  []string
 }
 
 // Search API returns the name and claim id of the results based on the query passed.
@@ -61,6 +63,10 @@ func Search(r *http.Request) api.Response {
 		//v.Field(&searchRequest.ClaimType, validator.ClaimTypeValidator),
 		v.Field(&searchRequest.MediaType, validator.MediaTypeValidator),
 	})
+	if err != nil {
+		return api.Response{Error: errors.Err(err), Status: http.StatusBadRequest}
+	}
+	searchRequest.filterset, err = collectFilters(searchRequest.Filters)
 	if err != nil {
 		return api.Response{Error: errors.Err(err), Status: http.StatusBadRequest}
 	}
