@@ -155,7 +155,7 @@ func (c Claim) isIOSFilter() bool {
 			strings.Contains(c.Title.String, f) ||
 			strings.Contains(c.Description.String, f) ||
 			c.tagsContain(f) {
-			c.IOSFiltered = true
+			return true
 		}
 	}
 	return false
