@@ -32,6 +32,7 @@ type searchRequest struct {
 	RelatedTo *string
 	SortBy    *string
 	Include   *string
+	Language  *string
 	//Should change these calls in the app
 	ContentType *string `json:"contentType"`
 	MediaType   *string `json:"mediaType"`

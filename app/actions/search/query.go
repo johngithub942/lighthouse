@@ -4,10 +4,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/lbryio/lighthouse/app/es/index"
-
 	"github.com/lbryio/lbry.go/extras/errors"
 	"github.com/lbryio/lbry.go/v2/extras/util"
+	"github.com/lbryio/lighthouse/app/es/index"
 
 	"github.com/sirupsen/logrus"
 	"gopkg.in/olivere/elastic.v6"
@@ -306,6 +305,10 @@ func (r searchRequest) getFilters() []elastic.Query {
 		}
 	}
 
+	if language := r.languageFilter(); language != nil {
+		filters = append(filters, language)
+	}
+
 	if len(filters) > 0 {
 		return append(filters, bidstateFilter) //, r.noClaimChannelFilter())
 	}
@@ -440,6 +443,13 @@ func (r searchRequest) channelFilter() *elastic.BoolQuery {
 func (r searchRequest) claimIDFilter() *elastic.MatchQuery {
 	if r.ClaimID != nil {
 		return elastic.NewMatchQuery("claimId", r.ClaimID)
+	}
+	return nil
+}
+
+func (r searchRequest) languageFilter() *elastic.MatchQuery {
+	if r.Language != nil {
+		return elastic.NewMatchQuery("language", r.Language)
 	}
 	return nil
 }

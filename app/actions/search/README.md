@@ -137,6 +137,10 @@ this will ensure the results you get are claims with no fee value recorded.
 This will add specific fields to the result, that would normally be provided from
 a resolve call.
 
+## language [`bool`] Optional
+
+This will filter content results to the language passed. 
+
 ```json
 {
   "channel": "@1Player",
