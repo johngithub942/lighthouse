@@ -49,7 +49,7 @@ const limitForUsefulResults = 300
 
 func truncate(s string) string {
 	if len(s) > limitForUsefulResults {
-		return s[:limitForUsefulResults]
+		return string([]rune(s)[:limitForUsefulResults])
 	}
 	return s
 }
