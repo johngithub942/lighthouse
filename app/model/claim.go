@@ -52,6 +52,7 @@ type Claim struct {
 	EffectiveSum        uint64                 `json:"effective_sum,omitempty"`
 	ChannelEffectiveSum uint64                 `json:"channel_effective_sum,omitempty"`
 	IOSFiltered         bool                   `json:"ios_filtered,omitempty"`
+	Language            *null.String           `json:"language,omitempty"`
 }
 
 // NewClaim creates an instance of Claim with default values for pointers.
@@ -73,6 +74,7 @@ func NewClaim() Claim {
 		ThumbnailURL:    util.PtrToNullString(""),
 		Fee:             util.PtrToNullFloat64(0),
 		TagsStr:         util.PtrToNullString(""),
+		Language:        util.PtrToNullString(""),
 	}
 }
 
@@ -132,7 +134,8 @@ func (c *Claim) PopulateFromDB(rows *sql.Rows) error {
 		&c.NSFW,
 		c.ThumbnailURL,
 		c.Fee,
-		c.TagsStr)
+		c.TagsStr,
+		c.Language)
 	if err != nil {
 		err = errors.Prefix("Scan Err:", err)
 	}

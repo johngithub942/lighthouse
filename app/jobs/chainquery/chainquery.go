@@ -60,7 +60,8 @@ SELECT c.id,
     c.is_nsfw,
 	c.thumbnail_url,
 	c.fee,
- 	GROUP_CONCAT(t.tag) as tags 
+ 	GROUP_CONCAT(t.tag) as tags,
+    c.language
 FROM claim c LEFT JOIN claim p on p.claim_id = c.publisher_id 
 LEFT JOIN claim_tag ct ON ct.claim_id = c.claim_id 
 LEFT JOIN tag t ON ct.tag_id = t.id 
