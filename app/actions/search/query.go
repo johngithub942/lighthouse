@@ -32,7 +32,7 @@ func (r searchRequest) newQuery() *elastic.FunctionScoreQuery {
 	//The minimum things that should match for it to be considered a valid result.
 	//Anything in here will allow it to be scaled and returned
 	min := elastic.NewBoolQuery()
-	min.Should(r.moreLikeThis())
+	//min.Should(r.moreLikeThis())
 	min.Should(r.matchPhraseName())
 	min.Should(r.matchName())
 	min.Should(r.matchChannelName())
@@ -48,14 +48,14 @@ func (r searchRequest) newQuery() *elastic.FunctionScoreQuery {
 	min.Should(r.matchCompressedChannel())
 	base.Must(min)
 
-	if r.RelatedTo != nil {
-		base = elastic.NewBoolQuery()
-		base.Should(r.moreLikeThis())
-		base.Filter(r.getFilters()...)
-		return elastic.NewFunctionScoreQuery().
-			ScoreMode("sum").
-			Query(base)
-	}
+	//if r.RelatedTo != nil {
+	//	base = elastic.NewBoolQuery()
+	//	base.Should(r.moreLikeThis())
+	//	base.Filter(r.getFilters()...)
+	//	return elastic.NewFunctionScoreQuery().
+	//		ScoreMode("sum").
+	//		Query(base)
+	//}
 	//Any parameters that should filter but not impact scores
 	base.Filter(r.getFilters()...)
 

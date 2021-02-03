@@ -1,6 +1,7 @@
 package search
 
 import (
+	"sort"
 	"strings"
 
 	"github.com/lbryio/lbry.go/v2/extras/errors"
@@ -46,10 +47,20 @@ func checkForSpecialHandling(s string) string {
 }
 
 const limitForUsefulResults = 300
+const maxWordsForRelated = 5
 
-func truncate(s string) string {
+func truncate(s string, related bool) string {
 	if len([]rune(s)) > limitForUsefulResults {
 		return string([]rune(s)[:limitForUsefulResults])
+	}
+	if related {
+		words := strings.Split(s, " ")
+		sort.Slice(words, func(i, j int) bool {
+			return len([]rune(words[i])) < len([]rune(words[j]))
+		})
+		if len(words) > maxWordsForRelated {
+			return strings.Join(words[:2], " ")
+		}
 	}
 	return s
 }

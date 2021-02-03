@@ -72,7 +72,7 @@ func Search(r *http.Request) api.Response {
 		return api.Response{Error: errors.Err(err), Status: http.StatusBadRequest}
 	}
 	searchRequest.searchType = "general"
-	searchRequest.S = truncate(searchRequest.S)
+	searchRequest.S = truncate(searchRequest.S, searchRequest.RelatedTo != nil)
 	searchRequest.S = checkForSpecialHandling(searchRequest.S)
 	searchRequest.terms = len(strings.Split(searchRequest.S, " "))
 	if searchRequest.RelatedTo != nil {
