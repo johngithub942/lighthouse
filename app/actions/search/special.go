@@ -48,7 +48,7 @@ func checkForSpecialHandling(s string) string {
 const limitForUsefulResults = 300
 
 func truncate(s string) string {
-	if len(s) > limitForUsefulResults {
+	if len([]rune(s)) > limitForUsefulResults {
 		return string([]rune(s)[:limitForUsefulResults])
 	}
 	return s
