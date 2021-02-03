@@ -56,7 +56,7 @@ func truncate(s string, related bool) string {
 	if related {
 		words := strings.Split(s, " ")
 		sort.Slice(words, func(i, j int) bool {
-			return len([]rune(words[i])) < len([]rune(words[j]))
+			return len([]rune(words[i])) > len([]rune(words[j]))
 		})
 		if len(words) > maxWordsForRelated {
 			return strings.Join(words[:2], " ")
