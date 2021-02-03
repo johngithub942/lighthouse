@@ -54,12 +54,24 @@ func truncate(s string, related bool) string {
 		return string([]rune(s)[:limitForUsefulResults])
 	}
 	if related {
-		words := strings.Split(s, " ")
-		sort.Slice(words, func(i, j int) bool {
-			return len([]rune(words[i])) > len([]rune(words[j]))
+		orderedwords := strings.Split(s, " ")
+		sortedwords := strings.Split(s, " ")
+		sort.Slice(sortedwords, func(i, j int) bool {
+			if len([]rune(sortedwords[i])) == len([]rune(sortedwords[j])) {
+				return i < j
+			}
+			return len([]rune(sortedwords[i])) > len([]rune(sortedwords[j]))
 		})
-		if len(words) > maxWordsForRelated {
-			return strings.Join(words[:2], " ")
+		if len(orderedwords) > maxWordsForRelated {
+			var reducedwords []string
+			for _, w := range orderedwords {
+				for i, a := range sortedwords {
+					if a == w && i < maxWordsForRelated {
+						reducedwords = append(reducedwords, a)
+					}
+				}
+			}
+			return strings.Join(reducedwords, " ")
 		}
 	}
 	return s
