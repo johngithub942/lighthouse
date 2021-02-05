@@ -310,9 +310,9 @@ func (r searchRequest) getFilters() []elastic.Query {
 	}
 
 	if len(filters) > 0 {
-		return append(filters, bidstateFilter) //, r.noClaimChannelFilter())
+		return append(filters, bidstateFilter, r.noClaimChannelFilter())
 	}
-	return []elastic.Query{bidstateFilter} //, r.noClaimChannelFilter()}
+	return []elastic.Query{bidstateFilter, r.noClaimChannelFilter()}
 }
 
 var cadTypes = []interface{}{"SKP", "simplify3d_stl"}
