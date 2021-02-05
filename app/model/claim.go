@@ -95,6 +95,7 @@ func GetClaimsFromDBRows(rows *sql.Rows) ([]Claim, int, error) {
 				return nil, 0, errors.Prefix("could not parse json for value: ", err)
 			}
 		}
+		claim.Name = getNormalizedName(claim.Name)
 		claim.Value = value
 		claim.StrippedName = getStrippedName(claim.Name)
 		lastID = int(claim.ID)
@@ -206,7 +207,21 @@ func (c Claim) AsJSON() string {
 
 }
 
-var replacement = map[string]string{
+var normalizedReplacement = map[string]string{
+	".": "-",
+	"&": "-",
+}
+
+func getNormalizedName(name string) string {
+	var replacements []string
+	for k, v := range strippedReplacement {
+		replacements = append(replacements, k, v)
+	}
+	replacer := strings.NewReplacer(replacements...)
+	return replacer.Replace(name)
+}
+
+var strippedReplacement = map[string]string{
 	"-":   "",
 	"_":   "",
 	"The": "",
@@ -216,7 +231,7 @@ var replacement = map[string]string{
 
 func getStrippedName(name string) string {
 	var replacements []string
-	for k, v := range replacement {
+	for k, v := range strippedReplacement {
 		replacements = append(replacements, k, v)
 	}
 	replacer := strings.NewReplacer(replacements...)
