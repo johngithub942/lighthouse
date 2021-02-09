@@ -204,7 +204,7 @@ func (r searchRequest) matchChannel() *elastic.BoolQuery {
 		QueryName("channel-match-@boost").
 		Must(streamOnlyMatch).
 		Must(channelMatch).
-		Boost(5)
+		Boost(1)
 }
 
 func (r searchRequest) matchCompressedChannel() *elastic.BoolQuery {
