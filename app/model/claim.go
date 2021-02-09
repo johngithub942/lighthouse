@@ -214,7 +214,7 @@ var normalizedReplacement = map[string]string{
 
 func getNormalizedName(name string) string {
 	var replacements []string
-	for k, v := range strippedReplacement {
+	for k, v := range normalizedReplacement {
 		replacements = append(replacements, k, v)
 	}
 	replacer := strings.NewReplacer(replacements...)
