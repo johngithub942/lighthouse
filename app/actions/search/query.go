@@ -135,7 +135,7 @@ func (r searchRequest) matchTitle() *elastic.MatchQuery {
 func (r searchRequest) matchPhraseTitle() *elastic.MatchPhraseQuery {
 	return elastic.NewMatchPhraseQuery("title", r.escaped()).
 		QueryName("title-match-phrase").
-		Boost(10)
+		Boost(5)
 }
 
 func (r searchRequest) descriptionContains() *elastic.QueryStringQuery {
