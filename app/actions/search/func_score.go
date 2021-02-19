@@ -9,7 +9,7 @@ import (
 const effectiveFactor = 19.0
 
 func controllingBoostQuery() *elastic.ConstantScoreQuery {
-	return elastic.NewConstantScoreQuery(elastic.NewMatchQuery("bid_state", "Controlling")).Boost(300)
+	return elastic.NewConstantScoreQuery(elastic.NewMatchQuery("bid_state", "Controlling")).Boost(100)
 }
 
 func thumbnailBoostQuery() *elastic.ConstantScoreQuery {
