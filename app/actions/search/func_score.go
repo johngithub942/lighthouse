@@ -26,6 +26,7 @@ func claimWeightFuncScoreQuery() *elastic.FunctionScoreQuery {
 		Field("effective_amount").
 		Factor(effectiveFactor).
 		Modifier("log1p").
+		Weight(4.0).
 		Missing(1)
 
 	return elastic.NewFunctionScoreQuery().AddScoreFunc(score)
@@ -36,6 +37,7 @@ func channelWeightFuncScoreQuery() *elastic.FunctionScoreQuery {
 		Field("certificate_amount").
 		Factor(effectiveFactor).
 		Modifier("log1p").
+		Weight(2.0).
 		Missing(1)
 
 	return elastic.NewFunctionScoreQuery().AddScoreFunc(score)
